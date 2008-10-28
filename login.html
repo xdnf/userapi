@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>...</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="cache-control" content="no-cache">
+<link rel="stylesheet" href="lite.css" type="text/css" />
+<script src="lang_en.js"></script>
+<script src="config.js"></script>
+<script src="lite.js"></script>
+<style>
+#captcha {
+ margin: 5px 0;
+ cursor: pointer;
+}
+
+.login_button, .login_button_on {
+ height: 18px;
+ cursor: pointer;
+ padding: 3px 0;
+ text-align: center;
+ font-weight: bold;
+ border: 1px solid #8191A8;
+ background: #8C9DB6;
+ color: #FFF;
+}
+
+.login_button_on {
+ border: 1px solid #3B567F;
+ background-color: #516E9A;
+ color:#FFFFFF;
+}
+
+.reg_button, .reg_button_on {
+ padding: 6px 8px;
+ margin: 0px;
+ clear: both;
+ text-align: center;
+ cursor: pointer;
+ font-weight: bold;
+ border: 1px solid #8191A8;
+ background: #8C9DB6;
+ color: #FFF;
+}
+
+.reg_button_on {
+ border: 1px solid #3B567F;
+ background-color: #516E9A;
+ color:#FFFFFF;
+}
+
+</style>
+<script type="text/javascript">
+function postIt(withCaptcha) {
+ error = getCookie('sid');
+ if ((error == -2 || error == -3) && !withCaptcha) {
+  showCaptcha('login');
+  return;
+ }
+
+ if (withCaptcha) {
+  ge('fccodelogin').value = ge('codelogin').value;
+  ge('fcsidlogin').value = captcha_sid;
+ }
+
+ hash = window.location.hash;
+ var pos = hash.indexOf(';id=');
+ if (pos > -1) {
+  id = hash.substr(pos+4);
+  document.getElementById('id').value = id;
+ }  
+ if (ge('email').value.length > 0 && ge('pass').value.length > 0
+     && ge('email').value != l_mail+':') {
+  document.getElementById('true_login').submit();
+ }
+}
+</script>
+</head>
+<body onunload="if(ge('email').value ==l_mail+':'){ge('email').value=''};">
+
+<form name='true_login' id='true_login' method='post' action='http://login.userapi.com/auth'>
+<input type='hidden' id='site_id' name='site' value='0' />
+<input type='hidden' id='id' name='id' value='0' />
+<input type='hidden' id='fccodelogin' name='fccode' value='0' />
+<input type='hidden' id='fcsidlogin' name='fcsid' value='0' />
+<input type='hidden' name='login' value='force'>
+
+<div id='start_wrap'>
+<div onclick="location.href='login.html';" class='start' onmouseover="this.className='start_on'" onmouseout="this.className='start'">
+<script>pu(site_name);document.title = site_name;</script>
+</div>
+</div>
+
+<div id="top_menu">
+<div id="top_wrap" style='text-align: left'>
+
+<table style="width: 420px; margin:0;" cellspacing="0" cellpadding="0">
+<tr>
+<td style="width: 150px; ">
+<input onKeyPress="if(event.keyCode==13){postIt();}" style="padding-left: 8px; padding-top: 5px; font-size: 11px; font-family: Tahoma; letter-spacing: 1px; height: 18px; width:143px; margin: 4px 0 4px 5px; border: 1px solid #C0C6D0;" type='text' name='email' id='email' onfocus="this.style.borderColor='#A4ABB7';if(this.value==l_mail+':'){this.value='';}" onblur="this.style.borderColor='#C0C6D0';if(this.value.length==0){this.value=l_mail+':'}">
+</td>
+<td style="width: 150px;">
+<input onKeyPress="if(event.keyCode==13){postIt();}" style="padding-left: 8px; padding-top: 5px; font-size: 11px; font-family: Tahoma; letter-spacing: 1px; height: 18px; width: 143px; margin: 4px 0 4px 5px; border: 1px solid #C0C6D0;"  type='password' name='pass' id='pass' onfocus="this.style.borderColor='#A4ABB7'" onblur="this.style.borderColor='#C0C6D0';if(this.value.length==0){hide('pass');show('fakepass');}">
+<input id='fakepass' style="display: none; padding-left: 8px; padding-top: 5px; font-size: 11px; font-family: Tahoma; letter-spacing: 1px; height: 18px; width: 143px; margin: 4px 0 4px 5px; border: 1px solid #C0C6D0;" type='text' onfocus="hide('fakepass');show('pass');ge('pass').focus();" onblur="" value="Password:">
+<script>ge('fakepass').value = l_pass+':';</script>
+</td>
+<td style="width: 120px; padding: 4px 5px; _padding: 5px; ">
+<div style='border-bottom: 1px solid #C0C6D0'><div onClick='postIt();' onmouseover="this.className='login_button_on'" onmouseout="this.className='login_button'" class="login_button"><script>pu(l_logi)</script></div></div>
+</td>
+</tr>
+</table></div>
+<div id="loading" style="display: none;"></div>
+</div></form>
+
+
+<div id="pad"></div>
+
+<div id='incorrect' style='margin: 0px auto 20px auto; width:620px; display:none'>
+<div class='report' style='margin:0px'><script>pu(l_eopi)</script></div>
+</div>
+
+<div id="message">
+
+<div style='width: 620px; margin:10px 50px'>
+<b><script>pu(l_than)</script></b><br/><br/>
+<script>pu(addBr(l_rtxt))</script>
+</div>
+</div>
+
+<div id="main" style="display: block;">
+
+<div style='width: 620px;margin-left:40px'>
+
+<script>
+setTimeout(function() { if (ge('email').value.length == 0) { ge('email').blur(); ge('email').value=l_mail+':'; } if(ge('pass').value.length==0){hide('pass'); show('fakepass');} }, 100);
+var options = generateYears(0);
+var error = parseInt(getCookie('sid'));
+if (error <= -3) {show('incorrect');}
+</script>
+
+<form name='auto_login' id='auto_login' method='post' action='http://login.userapi.com/auth'>
+
+<input type='hidden' id='loc' name='loc' value='' />
+<input type='hidden' id='ie' name='ie' value='0' />
+<input type='hidden' id='site' name='site' value='0' />
+<input type='hidden' id='login' name='login' value='auto' />
+</form>
+
+<div style="margin: 00px 0 10px 14px;"><script>ge('site').value = site_id;ge('site_id').value = site_id;pu(l_star);</script>
+</div>
+
+</div>
+
+<div id='countries' onmouseover='over_countries = true;' onmouseout='over_countries = false;'></div>
+<div id='cities' onmouseover='over_cities=true;' onmouseout='over_cities=false;' ></div><div id='schools' onmouseover='over_schools=true;' onmouseout='over_schools=false;'></div>
+<div id='search_results' style='display: none'></div>
+<div id='add_school' style='display: none'></div>
+
+<div id='regForm' style='display:none; margin:0px'>
+
+<div class='block_header' style='cursor:default'>
+<table class="bl_pad"><tbody><tr><td class="bl_1"><script>pu(l_regf);</script> <span id="photo_num"></span></td><td class="bl_button" style="width: 1%;"/></tr></tbody></table>
+</div>
+
+<div style='margin:0px 50px'>
+<div id='schoolNum' style='margin:10px 0 10px 0'>&nbsp;</div>
+<table class="regTable" cellpadding=0 cellspacing=0 style='width: 100%'>
+<tr>
+<td style='border-bottom: 1px solid #D9DDE3; width:200px; padding-bottom: 10px;'><script>pu(l_stud)</script>:</td><td style='border-bottom: 1px solid #D9DDE3; '><select id="year"><script>pu(options);</script></select><div class="regErr" id="year_err"></div></td>
+</tr><tr>
+<td style='padding-top: 12px'><script>pu(l_fnam);</script>: </td><td style='padding-top: 10px'><input class='regInput' type='text' id='first_name'><div class="regErr" id="first_name_err"></div></td>
+</tr><tr>
+<td style='padding-top: 2px;'><script>pu(l_lnam);</script>: </td><td><input class='regInput' type='text' id='last_name'><div class="regErr" id="last_name_err"></div></td>
+</tr><tr>
+<td style='padding-top: 2px;'><script>pu(l_mail);</script>: </td><td><input class='regInput' type='text' id='reg_email'><div class="regErr" id="reg_email_err"></div></td>
+</tr><tr>
+<td style='padding-top: 2px;'><script>pu(l_pass);</script>: </td><td><input class='regInput' type='password' id='reg_pass'><div class="regErr" id="reg_pass_err"></div></td>
+</tr><tr>
+<td style='padding-top: 2px;'><script>pu(l_sex);</script>: </td><td style='vertical-align:top'>
+<input style='margin: 5px 5px 0px 0px;padding-top:5px;' type='radio' name='sex' id='male' value='2'><label for='male'><script>pu(l_male);</script></label>
+</td>
+</tr><tr>
+<td></td>
+<td>
+<input style='margin: 5px 5px 0px 0px;padding-top:5px;' type='radio' id='female' name='sex' value='1'><label for='female'><script>pu(l_fema);</script></label>
+</td>
+</tr><tr>
+<td style='padding-top: 7px;'><script>pu(l_code);</script>: </td><td style="padding-top: 5px"><input type='text' id='code' class='regInput' style="width: 120px;"/><br/><img id='captcha' src="" onClick="generateCaptcha();"><div class="regErr" id="code_err"></div></td>
+</tr><tr>
+<td colspan=2><div style='border-bottom:1px solid #D0D7E2'><div id='submit' class='reg_button' onmouseout="this.name='off';this.className='reg_button'" onmouseover="this.name='on';this.className='reg_button_on'" onClick="submitReg();"><script>pu(l_regi);</script></div></div></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+
+<div id='overlay' ><iframe id='goodframe'></iframe></div>
+<div id='captcha_area'></div>
+
+<script>
+ var captcha_sid;
+ var current_school = 0;
+ generateCaptcha();
+
+ countries.info = all_countries;
+ countries.num = all_countries.length;
+ countries.current = 0;
+ query = "";
+ countries.must_place_block = 'countries';
+ countries.getBlock(0, 16);
+ schools.func = "showRegForm";
+ function showRegForm(school, i, type) {
+  name = schools.info[i][1];
+  current_school = school;
+  name = schoolTypes[type]+" "+name;
+  ge('schools_search_input').value = ge('schools_search_input')._old_value = name;
+  schools.current = school;
+  hide('schools_big_table'); 
+  doRequest("&act=get_school_num&s="+school, gotSchoolNum);
+  show('regForm');
+ }
+
+ function gotSchoolNum(d) {
+  if (d.n) {
+   ge('schoolNum').innerHTML = l_rmar+" <b>"+d.n+"</b>";
+  }
+ }
+
+ function submitReg() {
+  var year = ge('year').value;
+  var fn = ge('first_name').value;
+  var ln = ge('last_name').value;
+  var email = ge('reg_email').value;
+  var pass = ge('reg_pass').value;
+  var sex = ge('male').checked ? 2 : ge('female').checked ? 1 : 0;
+  var ccode = ge('code').value; 
+  var err = 0; 
+  
+  hide('year_err');
+  hide('first_name_err');
+  hide('last_name_err');
+  hide('reg_pass_err');
+  hide('reg_email_err');
+  hide('code_err');
+  
+  if (year == 0) {
+   showRegError(l_reye, 'year'); err = 1;
+  }
+  if (fn.length < 2) {
+   showRegError(l_refn, 'first_name'); err = 1;
+  } 
+  if (fn.length < 2) {
+   showRegError(l_reln, 'last_name'); err = 1;
+  } 
+  if (pass.length < 6) {
+   showRegError(l_repa, 'reg_pass'); err = 1;
+  } 
+  if (ccode.length < 5) {
+   showRegError(l_reco, 'code'); err = 1;
+  }
+
+  if (email.length < 5) {
+   showRegError(l_rema, 'reg_email'); err = 1;
+  } else if (!(email.lastIndexOf(".") > email.indexOf("@") + 1 && email.indexOf("@") > 0)) {
+   showRegError(l_remi, 'reg_email'); err = 1;
+  }
+
+  if (err) { 
+   return;
+  }
+
+  ge('submit').onclick = function(){};
+  doRequest("&act=register&s="+current_school+"&year="+year+"&fn="+fn+"&ln="+ln+"&email="+email+"&pass="+pass+"&sex="+sex+"&site="+site_id+"&ccode="+ccode+"&csid="+captcha_sid, gotRegister);
+ }
+
+ function showRegError(error_text, id) { 
+   ge(id + "_err").innerHTML = error_text;
+   show(id + "_err");
+   ge(id).focus();
+ }
+
+ function gotRegister(d) {
+  ge('submit').onclick = function() { submitReg(); };
+  switch(d) {
+   case -1: 
+   case -7:
+    showRegError(l_reci, 'code');
+    generateCaptcha();
+    return;
+   case -6: 
+    showRegError(l_remu, 'reg_email');
+    generateCaptcha();
+    return;
+   case 1:
+    hide('main');
+    show('message');
+    return;
+  }
+ }
+
+</script>
+
+</body>

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>...</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="lite.css" type="text/css" />
+<script src="lang_en.js"></script>
+<script src="config.js"></script>
+<script src="lite.js"></script>
+</head>
+
+<body>
+
+<div id='start_wrap'>
+<div onclick='getPage(0);' class='start' onmouseover="this.className='start_on'" onmouseout="this.className='start'">
+<script>pu(site_name);</script>
+</div>
+</div>
+
+
+<div id='logout_wrap'>
+<div class='logout' onmouseover="this.className='logout_on'" onmouseout="this.className='logout'" onClick='logout();'>
+<div class='logout_pad'><script>pu(l_logo);</script></div>
+</div>
+</div>
+
+<div id='left_notifier'><input type='text' id='search_by_name' class='search_by_name' onfocus='focusSBN(this)' onblur='deFocusSBN(this)' onkeypress='if (event.keyCode==13) {searchByName();}'/>
+<div id='new'></div></div>
+<script>ge('search_by_name').value = l_srcd</script>
+
+<div id='top_menu'>
+<div id='top_wrap'>
+<div id='top_wrap2'>
+</div>
+</div>
+<div id='loading'></div>
+</div>
+
+<div id='pad'></div>
+
+<div id='inbox_area'></div>
+<div id='fave_area'></div>
+<div id='main'></div>
+<div id='search_area'></div>
+<div id='updates_area'></div>
+<div id='messages'></div>
+
+<div id='credits'><script>pu(l_made);</script></div>
+<div id='overlay' ><iframe id='goodframe'></iframe></div>
+<div id='captcha_area'></div>
+<iframe id='hifr' src='blank.html' style='display: none'></iframe>
+</body>
+</html>
