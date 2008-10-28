@@ -1702,6 +1702,7 @@ function getTopProfileBlock(d) {
  var str = "";
  var online = d.on ? "<div class='online'>"+l_onli+"</div>" : "";
  var edit = "";
+ var broadcast = "";
  no_photo = 0;
  var add_friend = "";
 
@@ -1727,6 +1728,7 @@ function getTopProfileBlock(d) {
 
  if (this_id == id) {
   edit = profileButton(l_edph, "editPhoto()");
+  broadcast = profileButton(l_startbr, "start_broadcast()");
   add_friend = friendButton(l_edpa, "editPage()");
 
  } else {
@@ -1743,10 +1745,12 @@ function getTopProfileBlock(d) {
  if (d.id == this_id && no_photo) {
   str += "<table id='top_block' border=0><tr><td><div id='left_photo' onmouseover='showActions()' onmouseout='hideActions()' style=\"background-repeat: no-repeat; background-image:url('"+d.bp+"');height:200px\"><span id='img_cont'></span>" +
       "<div id='edit_photo' style='display:block'>"+ edit + "</div>" +
+	  "<div id='broadcast' style='display:block'>"+ broadcast + "</div>" +
       "</div></td>";
  } else {
   str += "<table id='top_block' border=0><tr><td><div id='left_photo' onmouseover='showActions()' onmouseout='hideActions()' style=\"background-repeat: no-repeat; background-image:url('"+d.bp+"')\"><span id='img_cont'>"+img_cont+"</span>" +
       "<div id='edit_photo'>"+ edit + "</div>" +
+	  "<div id='broadcast'>"+ broadcast + "</div>" +
       "</div></td>";
  }
 
@@ -1772,12 +1776,12 @@ function getTopProfileBlock(d) {
 function showActions() {
  ge('left_photo').style.height = ge('left_photo').offsetHeight+'px';
  ge('img_cont').innerHTML='';
- show('edit_photo');
+ show('edit_photo', 'broadcast');
 }
 
 function hideActions() {
  ge('img_cont').innerHTML = img_cont;
- hide('edit_photo');
+ hide('edit_photo', 'broadcast');
 }
 
 function createSelect(options, selected) {
@@ -2170,6 +2174,7 @@ function showIfHidden(tag) {
  } else {
   return false;
  }
+ onTabSelect(tag);
 }
 
 function hideIfShown(tag) {

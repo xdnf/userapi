@@ -1274,6 +1274,11 @@ textarea {
  display: none;
 }
 
+#broadcast {
+ display: none;
+}
+
+
 .f_button_wrap {
  height:57px;
 }
@@ -1579,4 +1584,9 @@ table.activitiesRows td {
 
 .checkbox {
  margin:0px 5px 0px 0px;
+}
+
+#webcam {
+ position: absolute;  
+ overflow: hidden;  
 }

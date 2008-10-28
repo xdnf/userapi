@@ -317,6 +317,8 @@ l_bomy = "Who bookmarked me";
 // PROFILE PAGE
 
 l_edph = "Edit photo";
+l_startbr = "Start broadcast";
+l_stopbr = "Stop broadcast";
 l_edpa = "Edit page";
 l_bday = "Birthday";
 l_mobi = "Mobile phone";
