@@ -1732,6 +1732,7 @@ function getTopProfileBlock(d) {
   add_friend = friendButton(l_edpa, "editPage()");
 
  } else {
+  broadcast = profileButton(l_wtchcam, "start_watch()");
   if (d.f) {
    edit = profileButton(l_remb, "delFave()");   
   } else {
@@ -2167,14 +2168,14 @@ function messageBox() {
 }
 
 function showIfHidden(tag) {
+ onTabSelect(tag); 
  if (showing[tag] == 0) {
   show(tag);
   showing[tag] = 1;
   return true;
  } else {
   return false;
- }
- onTabSelect(tag);
+ } 
 }
 
 function hideIfShown(tag) {

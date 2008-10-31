@@ -1,14 +1,21 @@
-var webcam;
-var webcam_initiated = false;
-var webcam_block_opened = false;
+var webcam = document.createElement("div");
+var webcam_buttons;
+var fl = {
+	opened: {},
+	initiated: 0,
+	loaded: 0,
+	queue: []
+};
 
 //setTimeout(function(){ge('fl_webcam').width=320;ge('fl_webcam').height = 240;}, 10000);
 
 function init_webcam(){
-	if(webcam_initiated){
+	if(fl.initiated){
+		webcam_buttons.innerHTML = id == this_id
+			? profileButton(l_stopbr, "stop_broadcast()")
+			: profileButton(l_stopwtch, "stop_watch()");
 		return;
-	}
-	webcam = document.createElement("div");	
+	}		
 	webcam.id = "webcam";
 	var xy = absolute_xy(ge('left_photo'));
 	var fl_size = ["100%", "100%"];
@@ -24,19 +31,21 @@ function init_webcam(){
 	cont.style.width = cont_size[0] + "px"; 
 	cont.style.height = cont_size[1] + "px";	
 	
-	buttons = document.createElement("div");
-	buttons.style.width = "202px";
-	buttons.innerHTML = profileButton(l_stopbr, "stop_broadcast()");
+	webcam_buttons = document.createElement("div");
+	webcam_buttons.style.width = "202px";
+	webcam_buttons.innerHTML = id == this_id
+		? profileButton(l_stopbr, "stop_broadcast()")
+		: profileButton(l_stopwtch, "stop_watch()");
 	
 	webcam.appendChild(cont);
-	webcam.appendChild(buttons);
+	webcam.appendChild(webcam_buttons);
 	
 	var version = parseInt((new Date())/1000); // XXX
 		
 	var flashVars = ""
 			+ "uid=" + this_id 
 			+ "&name=%username_" + this_id + "%"
-			+ "&server=debian";
+			+ "&server=test.vkadre.ru";
 		
 	var html = ''
 			+'		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="' + fl_size[0] + '" height="' + fl_size[1] + '" id="fl_webcam" align="left">'
@@ -56,7 +65,7 @@ function init_webcam(){
 			+'				height="' + fl_size[1] + '"'
 			+'				name="fl_webcam"'
 			+'				align="left"'
-			+'				allowScriptAccess="sameDomain"'
+			+'				allowScriptAccess="always"'
 			+'				swLiveConnect="true"'
 			+'				type="application/x-shockwave-flash"'
 			+'				pluginspage="http://www.macromedia.com/go/getflashplayer" />'
@@ -65,7 +74,7 @@ function init_webcam(){
 	
 	document.body.appendChild(webcam);
 	//Log(webcam);
-	webcam_initiated = true;
+	fl.initiated = 1;
 }
 
 function Log(a){
@@ -90,19 +99,69 @@ function absolute_xy(el){
 
 function start_broadcast(){
 	init_webcam();
-	webcam.style.visibility = 'visible';
-	hide('img_cont');
-	ge('left_photo').style.background = "#FFF";	
-	webcam_block_opened = true;
+	switchWebcam(1);
+	fl.opened[id] = 1;
+	FLPush("start-broadcast");
 }
 
-function stop_broadcast(){	
-	ge('left_photo').style.background = "#FFF no-repeat url('"+profile_photo+"')";	
-	webcam.style.visibility = 'hidden';
-	show('img_cont');
-	webcam_block_opened = true;
+function stop_broadcast(){
+	switchWebcam(0);
+	fl.opened[id] = 0;
+	FLPush("stop-broadcast");	
+}
+
+function start_watch(){
+	init_webcam();
+	switchWebcam(1);
+	fl.opened[id] = 1;
+	FLPush("start-watch", {uid: id});
+}
+
+function stop_watch(){
+	switchWebcam(0);
+	fl.opened[id] = 0;
+	FLPush("stop-watch");
+}
+
+function switchWebcam(showcam){	
+	webcam.style.visibility = showcam ? 'visible' : 'hidden';
+	showcam ? hide('img_cont') : show('img_cont');
+	ge('left_photo').style.background = showcam ? "#FFF" : "#FFF no-repeat url('"+profile_photo+"')";	
 }
 
 function onTabSelect(tab){
-	
+	Log("onTabSelect: " + tab + " " + id + "/" + this_id + "/ " + (fl.opened[id] ? "opened" : "closed"));
+	switchWebcam(tab == "main" && fl.opened[id]);
+}
+
+function FLPush(action, data){
+	data = data || {};
+	if(!fl.loaded){
+		fl.queue.push({action: action, data: data});
+	} else {
+		try{
+			Log("FLPush: " + action);			
+			var exec = document.fl_webcam.JSCallback(action, data);			
+			if(exec != "ok"){
+				throw("error");
+			}
+		} catch(e) {
+			alert("EI failed: " + e);
+		}
+	}
+}
+
+function FLCallback(action, data){
+	// Log("FLCallback: " + action);
+	switch(action){
+		case "loaded":
+			fl.loaded = 1;
+			for(var k in fl.queue){
+				FLPush(fl.queue[k].action, fl.queue[k].data);
+			}
+			break;
+		case "Log":
+			Log("FL: " + data);
+			break;
+	}
 }

@@ -317,8 +317,10 @@ l_bomy = "Who bookmarked me";
 // PROFILE PAGE
 
 l_edph = "Edit photo";
-l_startbr = "Start broadcast";
-l_stopbr = "Stop broadcast";
+l_startbr = "Start webcam";
+l_stopbr = "Stop webcam";
+l_wtchcam = "Watch webcam";
+l_stopwtch = "Stop";
 l_edpa = "Edit page";
 l_bday = "Birthday";
 l_mobi = "Mobile phone";
